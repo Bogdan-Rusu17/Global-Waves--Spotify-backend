@@ -2,6 +2,7 @@ package main.userspace.user_interface.playlist_commands;
 
 import main.entities.Playlist;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 
@@ -34,6 +35,7 @@ public final class FollowCommand extends Command {
                         .put(selectedPlaylist, 1);
                 selectedPlaylist.setFollowers(selectedPlaylist.getFollowers() + 1);
                 message = "Playlist followed successfully.";
+                selectedPlaylist.notifyObservers(new Notification("New follow", "New follow from " + this.getUsername() + "."));
             } else {
                 UserSpaceDb.getDatabase().get(this.getUsername()).getIsFollowingMap()
                         .replace(selectedPlaylist, 0);
@@ -45,6 +47,7 @@ public final class FollowCommand extends Command {
                     .put(selectedPlaylist, 1);
             selectedPlaylist.setFollowers(selectedPlaylist.getFollowers() + 1);
             message = "Playlist followed successfully.";
+            selectedPlaylist.notifyObservers(new Notification("New follow", "New follow from " + this.getUsername() + "."));
         }
         this.getObjectNode().put("message", message);
         GlobalObjects.getInstance().getOutputs().add(this.getObjectNode());

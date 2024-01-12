@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.input.EpisodeInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
+import main.admin_commands.add_merch.BuyMerchCommand;
+import main.admin_commands.add_merch.SeeMerchCommand;
 import main.admin_commands.album_commands.*;
 import main.admin_commands.announcement_commands.AddAnnouncementCommand;
 import main.admin_commands.announcement_commands.RemoveAnnouncementCommand;
@@ -21,6 +23,12 @@ import main.admin_commands.delete_user.DeleteUserCommand;
 import main.admin_commands.event_commands.AddEventCommand;
 import main.admin_commands.event_commands.RemoveEventCommand;
 import main.globals.GlobalObjects;
+import main.monetization.BuyPremiumCommand;
+import main.monetization.CancelPremiumCommand;
+import main.monetization.CreateAdBreakCommand;
+import main.notification_system.GetNotificationsCommand;
+import main.notification_system.SubscribeCommand;
+import main.notification_system.UnsubscribeCommand;
 import main.pages.visitables.commands.ChangePageCommand;
 import main.pages.visitables.commands.PrintPageCommandWrapper;
 import main.userspace.user_interface.album_commands.AlbumShuffleCommand;
@@ -57,6 +65,7 @@ import main.userspace.user_interface.searchbar.subtypes.search.subtypes.*;
 import main.userspace.user_interface.searchbar.subtypes.select.subtypes.*;
 import main.userspace.user_interface.statistics_commands.GetOnlineUsersCommand;
 import main.wrapped.subtypes.ArtistWrappedCommand;
+import main.wrapped.subtypes.HostWrappedCommand;
 import main.wrapped.subtypes.NormalUserWrappedCommand;
 
 import java.util.ArrayList;
@@ -163,11 +172,34 @@ public class Command {
 
 
         switch (this.command) {
+            case "seeMerch" -> {
+                commandToExec = new SeeMerchCommand(this);
+            }
+            case "buyMerch" -> {
+                commandToExec = new BuyMerchCommand(this);
+            }
+            case "getNotifications" -> {
+                commandToExec = new GetNotificationsCommand(this);
+            }
+            case "subscribe" -> {
+                commandToExec = new SubscribeCommand(this);
+            }
+            case "adBreak" -> {
+                commandToExec = new CreateAdBreakCommand(this);
+            }
+            case "cancelPremium" -> {
+                commandToExec = new CancelPremiumCommand(this);
+            }
+            case "buyPremium" -> {
+                commandToExec = new BuyPremiumCommand(this);
+            }
             case "wrapped" -> {
                 if (GlobalObjects.getInstance().containsNormalUser(this.getUsername())) {
                     commandToExec = new NormalUserWrappedCommand(this);
-                } else {
+                } else if (GlobalObjects.getInstance().existsArtist(this.getUsername()) != null){
                     commandToExec = new ArtistWrappedCommand(this);
+                } else {
+                    commandToExec = new HostWrappedCommand(this);
                 }
             }
             case "getTop5Artists" -> {
@@ -284,6 +316,7 @@ public class Command {
                 }
             }
             case "load" -> {
+                UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
                 if (UserSpaceDb.getDatabase().get(username).getSearchBar()
                         .getSelectedSong() != null) {
                     commandToExec = new SongLoadCommand(this);

@@ -5,6 +5,7 @@ import main.entities.Album;
 import main.entities.Artist;
 import main.globals.GlobalObjects;
 import main.globals.LikeDB;
+import main.notification_system.Notification;
 import main.userspace.Command;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public final class AddAlbumCommand extends Command {
         Album newAlbum = new Album(this.getName(), this.getUsername(),
                 this.getDescription(), this.getReleaseYear(), this.getSongs());
         artist.getPage().getAlbums().add(newAlbum);
+        artist.notifyObservers(new Notification("New Album", "New Album from " + artist.getUsername() + "."));
         GlobalObjects.getInstance().getLibrary().getAlbums().add(newAlbum);
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new album successfully.");

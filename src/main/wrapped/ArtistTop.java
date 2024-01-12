@@ -11,6 +11,9 @@ public class ArtistTop {
     private HashMap<String, Integer> topFans = new HashMap<>();
     private HashMap<String, Integer> topSongs = new HashMap<>();
     private HashMap<String, Integer> topAlbums = new HashMap<>();
+    private double songRevenue = 0;
+    private double merchRevenue = 0;
+    private HashMap<String, Double> revenuePerSongs = new HashMap<>();
 
     public ArtistTop() {
 
@@ -19,6 +22,7 @@ public class ArtistTop {
     public void getListenerSong(SongInput song, int times, String listener) {
         if (!topSongs.containsKey(song.getName())) {
             topSongs.put(song.getName(), times);
+            revenuePerSongs.put(song.getName(), 0.0);
         } else {
             int noListens = topSongs.get(song.getName()) + times;
             topSongs.replace(song.getName(), noListens);
@@ -41,6 +45,30 @@ public class ArtistTop {
             int noListens = topFans.get(listener) + times;
             topFans.replace(listener, noListens);
         }
+    }
+
+    public double getMerchRevenue() {
+        return merchRevenue;
+    }
+
+    public void setMerchRevenue(double merchRevenue) {
+        this.merchRevenue = merchRevenue;
+    }
+
+    public double getSongRevenue() {
+        return songRevenue;
+    }
+
+    public void setSongRevenue(double songRevenue) {
+        this.songRevenue = songRevenue;
+    }
+
+    public HashMap<String, Double> getRevenuePerSongs() {
+        return revenuePerSongs;
+    }
+
+    public void setRevenuePerSongs(HashMap<String, Double> revenuePerSongs) {
+        this.revenuePerSongs = revenuePerSongs;
     }
 
     public HashMap<String, Integer> getTopFans() {

@@ -3,6 +3,7 @@ package main.admin_commands.announcement_commands;
 import main.entities.Announcement;
 import main.entities.Host;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
 import main.userspace.Command;
 
 public final class AddAnnouncementCommand extends Command {
@@ -39,6 +40,7 @@ public final class AddAnnouncementCommand extends Command {
         }
         Announcement newAnnounce = new Announcement(getName(), getDescription());
         host.getPage().getAnnouncements().add(newAnnounce);
+        host.notifyObservers(new Notification("New Announcement", "New Announcement from " + host.getUsername() + "."));
         this.outputBase();
         this.getObjectNode().put("message", this.getUsername()
                 + " has successfully added new announcement.");

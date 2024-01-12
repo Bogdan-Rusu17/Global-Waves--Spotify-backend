@@ -2,10 +2,16 @@ package main.entities;
 
 import fileio.input.SongInput;
 import main.globals.LikeDB;
+import main.notification_system.Notification;
+import main.notification_system.Observer;
+import main.notification_system.Subject;
 import main.pages.visitables.ArtistPage;
 import main.wrapped.ArtistTop;
 
-public final class Artist {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class Artist implements Subject {
     private String username;
     private int age;
     private String city;
@@ -13,6 +19,7 @@ public final class Artist {
     private ArtistTop top = new ArtistTop();
     private static int priority = 0;
     private int prio;
+    private List<Observer> observers = new ArrayList<>();
 
 
     public Artist(final String username, final int age, final String city) {
@@ -22,6 +29,23 @@ public final class Artist {
         this.page = new ArtistPage();
         prio = priority;
         priority++;
+    }
+
+    @Override
+    public void attach(Observer obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void dettach(Observer obs) {
+        observers.remove(obs);
+    }
+
+    @Override
+    public void notifyObservers(Notification notification) {
+        for (Observer observer : observers) {
+            observer.update(notification);
+        }
     }
 
     public int getPrio() {
@@ -82,6 +106,21 @@ public final class Artist {
             }
         }
         return total;
+    }
+
+    public Merch getMerchByName(String name) {
+        for (Merch merch : page.getMerchProducts())
+            if (merch.getName().equals(name))
+                return merch;
+        return null;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Observer> observers) {
+        this.observers = observers;
     }
 
     public ArtistTop getTop() {

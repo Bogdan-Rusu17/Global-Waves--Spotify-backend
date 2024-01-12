@@ -3,20 +3,61 @@ package main.entities;
 import fileio.input.PodcastInput;
 import fileio.input.UserInput;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
+import main.notification_system.Observer;
+import main.notification_system.Subject;
 import main.pages.visitables.HostPage;
 import main.userspace.UserSpaceDb;
+import main.wrapped.HostTop;
 
-public final class Host {
+import java.util.ArrayList;
+import java.util.List;
+
+public final class Host implements Subject {
     private String username;
     private int age;
     private String city;
     private HostPage page;
+    private List<Observer> observers = new ArrayList<>();
+    private HostTop top = new HostTop();
 
     public Host(final String username, final int age, final String city) {
         this.username = username;
         this.age = age;
         this.city = city;
         this.page = new HostPage();
+    }
+    @Override
+    public void attach(Observer obs) {
+        observers.add(obs);
+    }
+
+    @Override
+    public void dettach(Observer obs) {
+        observers.remove(obs);
+    }
+
+    @Override
+    public void notifyObservers(Notification notification) {
+        for (Observer observer : observers) {
+            observer.update(notification);
+        }
+    }
+
+    public HostTop getTop() {
+        return top;
+    }
+
+    public void setTop(HostTop top) {
+        this.top = top;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Observer> observers) {
+        this.observers = observers;
     }
 
     /**

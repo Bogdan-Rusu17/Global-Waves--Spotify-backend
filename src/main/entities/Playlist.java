@@ -2,19 +2,24 @@ package main.entities;
 
 import fileio.input.SongInput;
 import main.globals.LikeDB;
+import main.notification_system.Notification;
+import main.notification_system.Observer;
+import main.notification_system.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class used for the playlist Audio Entity
  */
-public final class Playlist {
+public final class Playlist implements Subject {
     private ArrayList<SongInput> songList = new ArrayList<>();
     private String name;
     private String owner;
     private String visibility;
     private int followers;
     private int totalLikes;
+    private List<Observer> observers = new ArrayList<>();
 
     /**
      *
@@ -30,7 +35,22 @@ public final class Playlist {
         this.visibility = visibility;
         this.followers = followers;
     }
+    @Override
+    public void attach(Observer obs) {
+        observers.add(obs);
+    }
 
+    @Override
+    public void dettach(Observer obs) {
+        observers.remove(obs);
+    }
+
+    @Override
+    public void notifyObservers(Notification notification) {
+        for (Observer observer : observers) {
+            observer.update(notification);
+        }
+    }
     /**
      *
      * @param song for song to be added into current playlist instance

@@ -3,6 +3,7 @@ package main.admin_commands.event_commands;
 import main.entities.Artist;
 import main.entities.Event;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
 import main.userspace.Command;
 
 public final class AddEventCommand extends Command {
@@ -110,6 +111,7 @@ public final class AddEventCommand extends Command {
         }
         Event newEvent = new Event(getUsername(), getName(), getDescription(), getDate());
         artist.getPage().getEvents().add(newEvent);
+        artist.notifyObservers(new Notification("New Event", "New Event from " + artist.getUsername() + "."));
         this.outputBase();
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new event successfully.");

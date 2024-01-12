@@ -2,6 +2,7 @@ package main.userspace.user_interface.player.subtypes.state.subtypes;
 
 import main.entities.Playlist;
 import main.globals.GlobalObjects;
+import main.monetization.AdMonetization;
 import main.userspace.UserSpaceDb;
 import main.userspace.user_interface.player.subtypes.state.State;
 
@@ -63,7 +64,17 @@ public final class PlaylistState extends State {
         if (this.getRepeat().equals("No Repeat")) {
             if (timestamp < this.getRemainedTime()) {
                 this.setRemainedTime(this.getRemainedTime() - timestamp);
+                if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
+                    if (this.getRemainedTime() <= 10) {
+                        AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                        UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
+                    }
+                }
                 return;
+            }
+            if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
+                AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
             }
             int nextSongIdx = getNextSong(songIndex);
             if (nextSongIdx == -1) {

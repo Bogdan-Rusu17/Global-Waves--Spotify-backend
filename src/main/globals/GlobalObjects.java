@@ -21,6 +21,13 @@ public final class GlobalObjects {
 
     }
 
+    public Artist getArtistBySongName(String songName) {
+        for (Artist artist : library.getArtists())
+            if (artist.getTop().getRevenuePerSongs().containsKey(songName))
+                return artist;
+        return null;
+    }
+
     public static GlobalObjects getInstance() {
         if (instance == null)
             instance = new GlobalObjects();

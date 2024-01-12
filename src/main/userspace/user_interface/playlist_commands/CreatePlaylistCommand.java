@@ -34,6 +34,7 @@ public final class CreatePlaylistCommand extends Command {
                 "public", 0);
         PlaylistDB.addPlaylist(newPlaylist);
         UserSpaceDb.getDatabase().get(this.getUsername()).getPlaylistList().add(newPlaylist);
+        newPlaylist.attach(UserSpaceDb.getDatabase().get(this.getUsername()));
         this.getObjectNode().put("message", "Playlist created successfully.");
         GlobalObjects.getInstance().getOutputs().add(this.getObjectNode());
     }

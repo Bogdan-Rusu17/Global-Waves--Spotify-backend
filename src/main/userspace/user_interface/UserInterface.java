@@ -1,7 +1,10 @@
 package main.userspace.user_interface;
 
 import fileio.input.SongInput;
+import main.entities.Merch;
 import main.entities.Playlist;
+import main.notification_system.Notification;
+import main.notification_system.Observer;
 import main.pages.visitables.HomePage;
 import main.pages.visitables.Page;
 import main.userspace.user_interface.player.Player;
@@ -11,7 +14,7 @@ import main.wrapped.UserTop;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public final class UserInterface {
+public final class UserInterface implements Observer {
     private boolean connectionStat;
     private SearchBar searchBar;
     private Player player;
@@ -19,15 +22,26 @@ public final class UserInterface {
     private ArrayList<SongInput> likedSongs = new ArrayList<>();
     private Page userPage = new HomePage();
     private HashMap<Playlist, Integer> isFollowingMap = new HashMap<>();
-    private UserTop top = new UserTop();
+    private UserTop top = new UserTop(this);
+    private boolean premiumUser = false;
+    private boolean incomingAd = false;
+    private int adPrice;
+    private ArrayList<Notification> notifications = new ArrayList<>();
+    private ArrayList<Merch> boughtMerch = new ArrayList<>();
 
     public UserInterface() {
         connectionStat = true;
     }
 
+    @Override
+    public void update(Notification notification) {
+        notifications.add(notification);
+    }
+
     /**
      * resets all selections, search results and loads
      */
+
     public void resetAllSelectLoad() {
         this.getSearchBar().setSongResults(null);
         this.getSearchBar().setPodcastResults(null);
@@ -47,6 +61,46 @@ public final class UserInterface {
         this.getPlayer().setLoadedAlbum(null);
 
 
+    }
+
+    public ArrayList<Merch> getBoughtMerch() {
+        return boughtMerch;
+    }
+
+    public void setBoughtMerch(ArrayList<Merch> boughtMerch) {
+        this.boughtMerch = boughtMerch;
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public boolean isIncomingAd() {
+        return incomingAd;
+    }
+
+    public void setIncomingAd(boolean incomingAd) {
+        this.incomingAd = incomingAd;
+    }
+
+    public int getAdPrice() {
+        return adPrice;
+    }
+
+    public void setAdPrice(int adPrice) {
+        this.adPrice = adPrice;
+    }
+
+    public boolean isPremiumUser() {
+        return premiumUser;
+    }
+
+    public void setPremiumUser(boolean premiumUser) {
+        this.premiumUser = premiumUser;
     }
 
     public UserTop getTop() {

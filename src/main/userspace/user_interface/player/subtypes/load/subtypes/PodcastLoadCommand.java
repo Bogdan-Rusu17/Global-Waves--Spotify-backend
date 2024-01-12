@@ -34,6 +34,9 @@ public final class PodcastLoadCommand extends LoadCommand {
                 .getResumeMap().containsKey(selectedPodcast)) {
             EpisodeInput firstEpisode = selectedPodcast.getEpisodes().get(0);
             UserSpaceDb.getDatabase().get(this.getUsername()).getTop().listenEpisode(firstEpisode, 1);
+            if (GlobalObjects.getInstance().existsHost(selectedPodcast.getOwner()) != null)
+                GlobalObjects.getInstance().existsHost(selectedPodcast.getOwner()).getTop()
+                    .getListenerEpisode(firstEpisode, 1, getUsername());
             PodcastState newState = new PodcastState(firstEpisode.getName(),
                     firstEpisode.getDuration(), selectedPodcast, 0);
             UserSpaceDb.getDatabase().get(this.getUsername()).getPlayer().setPodcastState(newState);
@@ -45,6 +48,12 @@ public final class PodcastLoadCommand extends LoadCommand {
                 .getPlayer().getResumer().getResumeMap().get(selectedPodcast);
         UserSpaceDb.getDatabase().get(this.getUsername()).getPlayer()
                 .setPodcastState(previousState);
+        UserSpaceDb.getDatabase().get(this.getUsername()).getTop().listenEpisode(previousState.getPodcast()
+                .getEpisodes().get(previousState.getEpisodeIndex()), 1);
+        if (GlobalObjects.getInstance().existsHost(selectedPodcast.getOwner()) != null)
+            GlobalObjects.getInstance().existsHost(selectedPodcast.getOwner()).getTop()
+                    .getListenerEpisode(previousState.getPodcast()
+                            .getEpisodes().get(previousState.getEpisodeIndex()), 1, getUsername());
         this.deleteSelection();
     }
 }

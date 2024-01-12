@@ -3,6 +3,7 @@ package main.admin_commands.add_merch;
 import main.entities.Artist;
 import main.entities.Merch;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
 import main.userspace.Command;
 
 public final class AddMerchCommand extends Command {
@@ -66,6 +67,7 @@ public final class AddMerchCommand extends Command {
         }
         Merch newMerch = new Merch(getName(), getDescription(), getPrice());
         artist.getPage().getMerchProducts().add(newMerch);
+        artist.notifyObservers(new Notification("New Merchandise", "New Merchandise from " + artist.getUsername() + "."));
         this.outputBase();
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new merchandise successfully.");

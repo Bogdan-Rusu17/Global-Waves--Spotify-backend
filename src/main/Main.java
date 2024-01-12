@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.input.LibraryInput;
+import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
 import main.entities.Album;
@@ -14,6 +15,7 @@ import main.entities.Artist;
 import main.globals.GlobalObjects;
 import main.globals.LikeDB;
 import main.globals.PlaylistDB;
+import main.monetization.CancelPremiumCommand;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 import main.userspace.user_interface.UserInterface;
@@ -25,8 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The entry point to this homework. It runs the checker that tests your implementation.
@@ -71,7 +73,7 @@ public final class Main {
                 action(file.getName(), filepath);
             }
             i++;
-            if (i > 3)
+            if (i > 10)
                 break;
         }
 
@@ -120,17 +122,48 @@ public final class Main {
             GlobalObjects.getInstance().getLastUserCommandTimestamp().put(
                     command.getUsername(), command.getTimestamp());
         }
+
+        for (UserInput user : GlobalObjects.getInstance().getLibrary().getUsers()) {
+            if (UserSpaceDb.getDatabase().get(user.getUsername()).isPremiumUser()) {
+                Command dummy = new Command();
+                dummy.setCommand("endProgramCancel");
+                dummy.setTimestamp(-1);
+                dummy.setUsername(user.getUsername());
+                Command com = new CancelPremiumCommand(dummy);
+                com.execCommand();
+            }
+        }
+
         // TODO add your implementation
         ObjectNode res = objectMapper.createObjectNode();
         int idx = 0;
-        GlobalObjects.getInstance().getLibrary().getArtists().sort(Comparator.comparing(Artist::getUsername));
-        for (Artist artist : GlobalObjects.getInstance().getLibrary().getArtists()) {
-            if (!artist.getTop().getTopFans().isEmpty()) {
+        List<Artist> sortedArtists = GlobalObjects.getInstance().getLibrary().getArtists().stream()
+                .sorted(Comparator.comparing((Artist a) -> a.getTop().getSongRevenue(), Comparator.reverseOrder())
+                        .thenComparing(a -> a.getTop().getMerchRevenue(), Comparator.reverseOrder())
+                        .thenComparing(Artist::getUsername))
+                .toList();
+//        GlobalObjects.getInstance().getLibrary().getArtists().sort(Comparator.comparing(Artist::getUsername));
+        for (Artist artist : sortedArtists) {
+            if (!artist.getTop().getTopFans().isEmpty() || artist.getTop().getMerchRevenue() > 0.0) {
                 ObjectNode artistNode = objectMapper.createObjectNode();
-                artistNode.put("merchRevenue", 0.0);
-                artistNode.put("songRevenue", 0.0);
+                artistNode.put("merchRevenue", Math.round(artist.getTop().getMerchRevenue() * 100.0) / 100.0);
+                artistNode.put("songRevenue", Math.round(artist.getTop().getSongRevenue() * 100.0) / 100.0);
                 artistNode.put("ranking", idx + 1);
-                artistNode.put("mostProfitableSong", "N/A");
+                Optional<Map.Entry<String, Double>> maxSongMoney = artist.getTop().getRevenuePerSongs().entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() != 0.0)
+                        .max((entry1, entry2) -> {
+                            int valueComparison = entry1.getValue().compareTo(entry2.getValue());
+                            if (valueComparison != 0) {
+                                return valueComparison;
+                            } else {
+                                return entry2.getKey().compareTo(entry1.getKey());
+                            }
+                        });
+                if (maxSongMoney.isPresent())
+                    artistNode.put("mostProfitableSong", maxSongMoney.get().getKey());
+                else
+                    artistNode.put("mostProfitableSong", "N/A");
                 idx++;
                 res.put(artist.getUsername(), artistNode);
             }

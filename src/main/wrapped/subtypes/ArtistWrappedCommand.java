@@ -20,6 +20,7 @@ public class ArtistWrappedCommand extends WrappedCommand {
     @Override
     public void execCommand() {
         this.outputBase();
+        int cnt = 0;
         Artist artist = GlobalObjects.getInstance().existsArtist(getUsername());
         ObjectNode topNode = Command.getObjectMapper().createObjectNode();
 
@@ -32,6 +33,7 @@ public class ArtistWrappedCommand extends WrappedCommand {
         ObjectNode albumNode = Command.getObjectMapper().createObjectNode();
         for (Map.Entry<String, Integer> entry : topAlbums.entrySet()) {
             albumNode.put(entry.getKey(), entry.getValue());
+            cnt++;
         }
         topNode.put("topAlbums", albumNode);
 
@@ -44,6 +46,7 @@ public class ArtistWrappedCommand extends WrappedCommand {
         ObjectNode songNode = Command.getObjectMapper().createObjectNode();
         for (Map.Entry<String, Integer> entry : topSongs.entrySet()) {
             songNode.put(entry.getKey(), entry.getValue());
+            cnt++;
         }
         topNode.put("topSongs", songNode);
 
@@ -57,12 +60,15 @@ public class ArtistWrappedCommand extends WrappedCommand {
         ArrayNode fansNode = Command.getObjectMapper().createArrayNode();
         for (Map.Entry<String, Integer> entry : topFans.entrySet()) {
             fansNode.add(entry.getKey());
+            cnt++;
         }
         topNode.put("topFans", fansNode);
-
         topNode.put("listeners", artist.getTop().getTopFans().size());
-
-        this.getObjectNode().put("result", topNode);
-        GlobalObjects.getInstance().getOutputs().add(this.getObjectNode());
+        if (cnt == 0) {
+            this.outputErrorMessage("No data to show for artist " + getUsername() + ".");
+        } else {
+            this.getObjectNode().put("result", topNode);
+            GlobalObjects.getInstance().getOutputs().add(this.getObjectNode());
+        }
     }
 }

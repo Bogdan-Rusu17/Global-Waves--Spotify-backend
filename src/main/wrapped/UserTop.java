@@ -5,6 +5,7 @@ import fileio.input.SongInput;
 import main.entities.Album;
 import main.entities.Artist;
 import main.globals.GlobalObjects;
+import main.userspace.user_interface.UserInterface;
 
 import java.util.HashMap;
 
@@ -14,17 +15,35 @@ public class UserTop {
     private HashMap<String, Integer> topSongs = new HashMap<>();
     private HashMap<String, Integer> topAlbums = new HashMap<>();
     private HashMap<String, Integer> topEpisodes = new HashMap<>();
+    private HashMap<String, Integer> timeFrameListenedSongs = new HashMap<>();
+    private HashMap<String, Integer> MonetizedListenedSongs = new HashMap<>();
+    private UserInterface ui;
 
-    public UserTop() {
-
+    public UserTop(UserInterface ui) {
+        this.ui = ui;
     }
-
     public void listenSong(SongInput song, int times) {
         if (!topSongs.containsKey(song.getName())) {
             topSongs.put(song.getName(), times);
         } else {
             int noListens = topSongs.get(song.getName()) + times;
             topSongs.replace(song.getName(), noListens);
+
+        }
+        if (ui.isPremiumUser()) {
+            if (!timeFrameListenedSongs.containsKey(song.getName())) {
+                timeFrameListenedSongs.put(song.getName(), times);
+            } else {
+                int timeFrameListened = timeFrameListenedSongs.get(song.getName()) + times;
+                timeFrameListenedSongs.replace(song.getName(), timeFrameListened);
+            }
+        } else {
+            if (!MonetizedListenedSongs.containsKey(song.getName())) {
+                MonetizedListenedSongs.put(song.getName(), times);
+            } else {
+                int timeFrameListened = MonetizedListenedSongs.get(song.getName()) + times;
+                MonetizedListenedSongs.replace(song.getName(), timeFrameListened);
+            }
         }
         listenArtist(GlobalObjects.getInstance().existsArtist(song.getArtist()), times);
         listenGenre(song.getGenre(), times);
@@ -61,6 +80,22 @@ public class UserTop {
             int noListens = topEpisodes.get(episode.getName()) + times;
             topEpisodes.replace(episode.getName(), noListens);
         }
+    }
+
+    public HashMap<String, Integer> getMonetizedListenedSongs() {
+        return MonetizedListenedSongs;
+    }
+
+    public void setMonetizedListenedSongs(HashMap<String, Integer> monetizedListenedSongs) {
+        MonetizedListenedSongs = monetizedListenedSongs;
+    }
+
+    public HashMap<String, Integer> getTimeFrameListenedSongs() {
+        return timeFrameListenedSongs;
+    }
+
+    public void setTimeFrameListenedSongs(HashMap<String, Integer> timeFrameListenedSongs) {
+        this.timeFrameListenedSongs = timeFrameListenedSongs;
     }
 
     public HashMap<String, Integer> getTopArtists() {

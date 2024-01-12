@@ -91,7 +91,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode episodeNode = Command.getObjectMapper().createObjectNode();
         for (Map.Entry<String, Integer> entry : topEpisodes.entrySet()) {
-            songNode.put(entry.getKey(), entry.getValue());
+            episodeNode.put(entry.getKey(), entry.getValue());
             cnt++;
         }
         topNode.put("topEpisodes", episodeNode);

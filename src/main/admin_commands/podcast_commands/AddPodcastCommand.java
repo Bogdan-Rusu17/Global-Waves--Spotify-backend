@@ -4,6 +4,7 @@ import fileio.input.EpisodeInput;
 import fileio.input.PodcastInput;
 import main.entities.Host;
 import main.globals.GlobalObjects;
+import main.notification_system.Notification;
 import main.userspace.Command;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public final class AddPodcastCommand extends Command {
         newPodcast.setEpisodes(getEpisodes());
         newPodcast.setName(getName());
         host.getPage().getPodcasts().add(newPodcast);
+        host.notifyObservers(new Notification("New Podcast", "New Podcast from " + host.getUsername() + "."));
         GlobalObjects.getInstance().getLibrary().getPodcasts().add(newPodcast);
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new podcast successfully.");
