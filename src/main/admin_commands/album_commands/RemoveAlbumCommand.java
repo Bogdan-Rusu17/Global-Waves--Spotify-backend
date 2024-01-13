@@ -80,6 +80,7 @@ public final class RemoveAlbumCommand extends Command {
         GlobalObjects.getInstance().getLibrary().getAlbums().remove(albumToRemove);
         artist.getPage().getAlbums().remove(albumToRemove);
         for (SongInput song : albumToRemove.getSongs()) {
+            GlobalObjects.getInstance().getLibrary().getSongs().remove(song);
             for (UserInput user : GlobalObjects.getInstance().getLibrary().getUsers()) {
                 UserSpaceDb.getDatabase().get(user.getUsername()).getLikedSongs().remove(song);
             }

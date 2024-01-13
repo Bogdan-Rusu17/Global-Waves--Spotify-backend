@@ -27,7 +27,8 @@ public class ArtistTop {
             int noListens = topSongs.get(song.getName()) + times;
             topSongs.replace(song.getName(), noListens);
         }
-        getListenerAlbum(GlobalObjects.getInstance().getAlbumWithSong(song), times);
+        if (GlobalObjects.getInstance().getAlbumWithSong(song) != null)
+            getListenerAlbum(GlobalObjects.getInstance().getAlbumWithSong(song), times);
         getListenerFan(times, listener);
     }
     public void getListenerAlbum(Album album, int times) {

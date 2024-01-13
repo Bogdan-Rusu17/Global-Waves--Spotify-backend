@@ -73,7 +73,7 @@ public final class Main {
                 action(file.getName(), filepath);
             }
             i++;
-            if (i > 10)
+            if (i > 16)
                 break;
         }
 

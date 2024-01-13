@@ -29,8 +29,12 @@ import main.monetization.CreateAdBreakCommand;
 import main.notification_system.GetNotificationsCommand;
 import main.notification_system.SubscribeCommand;
 import main.notification_system.UnsubscribeCommand;
+import main.pages.navigation_history.NextPageCommand;
+import main.pages.navigation_history.PrevPageCommand;
 import main.pages.visitables.commands.ChangePageCommand;
 import main.pages.visitables.commands.PrintPageCommandWrapper;
+import main.recommendations.LoadRecommendationsCommand;
+import main.recommendations.UpdateRecommendationsCommand;
 import main.userspace.user_interface.album_commands.AlbumShuffleCommand;
 import main.userspace.user_interface.jump_commands.backward.BackwardCommand;
 import main.userspace.user_interface.jump_commands.forward.ForwardCommand;
@@ -90,6 +94,7 @@ public class Command {
     private int price;
     private ArrayList<EpisodeInput> episodes;
     private String nextPage;
+    private String recommendationType;
     private static ObjectMapper objectMapper = new ObjectMapper();
     private ObjectNode objectNode = objectMapper.createObjectNode();
     private static int lastTimestamp = 0;
@@ -172,6 +177,30 @@ public class Command {
 
 
         switch (this.command) {
+            case "loadRecommendations" -> {
+                if (!UserSpaceDb.getDatabase().get(username).getConnectionStat()) {
+                    outputBase();
+                    objectNode.put("message", username + " is offline.");
+                    GlobalObjects.getInstance().getOutputs().add(objectNode);
+                    return;
+                }
+                if (UserSpaceDb.getDatabase().get(username).getLastRecommendation().isEmpty()) {
+                    outputBase();
+                    objectNode.put("message", "No recommendations available.");
+                    GlobalObjects.getInstance().getOutputs().add(objectNode);
+                    return;
+                }
+                commandToExec = new LoadRecommendationsCommand(this);
+            }
+            case "updateRecommendations" -> {
+                commandToExec = new UpdateRecommendationsCommand(this);
+            }
+            case "nextPage" -> {
+                commandToExec = new NextPageCommand(this);
+            }
+            case "previousPage" -> {
+                commandToExec = new PrevPageCommand(this);
+            }
             case "seeMerch" -> {
                 commandToExec = new SeeMerchCommand(this);
             }
@@ -639,6 +668,15 @@ public class Command {
         objectNode.put("message", message);
         GlobalObjects.getInstance().getOutputs().add(objectNode);
     }
+
+    public String getRecommendationType() {
+        return recommendationType;
+    }
+
+    public void setRecommendationType(String recommendationType) {
+        this.recommendationType = recommendationType;
+    }
+
     /**
      *
      */

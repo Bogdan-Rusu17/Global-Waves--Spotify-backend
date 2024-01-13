@@ -47,7 +47,8 @@ public class UserTop {
         }
         listenArtist(GlobalObjects.getInstance().existsArtist(song.getArtist()), times);
         listenGenre(song.getGenre(), times);
-        listenAlbum(GlobalObjects.getInstance().getAlbumWithSong(song), times);
+        if (GlobalObjects.getInstance().getAlbumWithSong(song) != null)
+            listenAlbum(GlobalObjects.getInstance().getAlbumWithSong(song), times);
     }
     public void listenGenre(String genre, int times) {
         if (!topGenres.containsKey(genre)) {

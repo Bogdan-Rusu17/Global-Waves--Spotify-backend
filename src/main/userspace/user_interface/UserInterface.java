@@ -5,6 +5,8 @@ import main.entities.Merch;
 import main.entities.Playlist;
 import main.notification_system.Notification;
 import main.notification_system.Observer;
+import main.pages.navigation_history.NavigationHistoryCaretaker;
+import main.pages.navigation_history.PageStateMemento;
 import main.pages.visitables.HomePage;
 import main.pages.visitables.Page;
 import main.userspace.user_interface.player.Player;
@@ -28,6 +30,10 @@ public final class UserInterface implements Observer {
     private int adPrice;
     private ArrayList<Notification> notifications = new ArrayList<>();
     private ArrayList<Merch> boughtMerch = new ArrayList<>();
+    private NavigationHistoryCaretaker history = new NavigationHistoryCaretaker();
+    private ArrayList<SongInput> recommendedSongs = new ArrayList<>();
+    private ArrayList<Playlist> recommendedPlaylists = new ArrayList<>();
+    private String lastRecommendation = "";
 
     public UserInterface() {
         connectionStat = true;
@@ -61,6 +67,45 @@ public final class UserInterface implements Observer {
         this.getPlayer().setLoadedAlbum(null);
 
 
+    }
+
+    public String getLastRecommendation() {
+        return lastRecommendation;
+    }
+
+    public void setLastRecommendation(String lastRecommendation) {
+        this.lastRecommendation = lastRecommendation;
+    }
+
+    public ArrayList<SongInput> getRecommendedSongs() {
+        return recommendedSongs;
+    }
+
+    public void setRecommendedSongs(ArrayList<SongInput> recommendedSongs) {
+        this.recommendedSongs = recommendedSongs;
+    }
+
+    public ArrayList<Playlist> getRecommendedPlaylists() {
+        return recommendedPlaylists;
+    }
+
+    public void setRecommendedPlaylists(ArrayList<Playlist> recommendedPlaylists) {
+        this.recommendedPlaylists = recommendedPlaylists;
+    }
+
+    public NavigationHistoryCaretaker getHistory() {
+        return history;
+    }
+
+    public void setHistory(NavigationHistoryCaretaker history) {
+        this.history = history;
+    }
+
+    public PageStateMemento savePageStateMemento() {
+        return new PageStateMemento(userPage);
+    }
+    public void restorePageStateMemento(PageStateMemento pageStateMemento) {
+        userPage = pageStateMemento.getPage();
     }
 
     public ArrayList<Merch> getBoughtMerch() {

@@ -10,6 +10,7 @@ import main.pages.visitables.HomePage;
 import main.pages.visitables.HostPage;
 import main.pages.visitables.LikedContentPage;
 import main.userspace.Command;
+import main.userspace.UserSpaceDb;
 
 public class PagePrinterVisitor implements PageVisitor {
     private static final int MAX_RESULTS = 4;
@@ -83,6 +84,32 @@ public class PagePrinterVisitor implements PageVisitor {
             cnt++;
             toPrint.append(playlist.getName()).append(", ");
             if (page.getFollowedPlaylists().indexOf(playlist) >= MAX_RESULTS) {
+                break;
+            }
+        }
+        if (cnt > 0) {
+            toPrint.deleteCharAt(toPrint.length() - 1);
+            toPrint.deleteCharAt(toPrint.length() - 1);
+        }
+        toPrint.append("]\n\nSong recommendations:\n\t[");
+        cnt = 0;
+        for (SongInput song : UserSpaceDb.getDatabase().get(user).getRecommendedSongs()) {
+            cnt++;
+            toPrint.append(song.getName()).append(", ");
+            if (UserSpaceDb.getDatabase().get(user).getRecommendedSongs().indexOf(song) >= MAX_RESULTS) {
+                break;
+            }
+        }
+        if (cnt > 0) {
+            toPrint.deleteCharAt(toPrint.length() - 1);
+            toPrint.deleteCharAt(toPrint.length() - 1);
+        }
+        cnt = 0;
+        toPrint.append("]\n\nPlaylists recommendations:\n\t[");
+        for (Playlist playlist : UserSpaceDb.getDatabase().get(user).getRecommendedPlaylists()) {
+            cnt++;
+            toPrint.append(playlist.getName()).append(", ");
+            if (UserSpaceDb.getDatabase().get(user).getRecommendedPlaylists().indexOf(playlist) >= MAX_RESULTS) {
                 break;
             }
         }
