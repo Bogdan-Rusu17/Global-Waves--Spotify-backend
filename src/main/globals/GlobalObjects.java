@@ -21,23 +21,41 @@ public final class GlobalObjects {
 
     }
 
-    public Artist getArtistBySongName(String songName) {
-        for (Artist artist : library.getArtists())
-            if (artist.getTop().getRevenuePerSongs().containsKey(songName))
+    /**
+     *
+     * @param songName to find whose song it is
+     * @return the artist if a song with given name is found for them
+     */
+    public Artist getArtistBySongName(final String songName) {
+        for (Artist artist : library.getArtists()) {
+            if (artist.getTop().getRevenuePerSongs().containsKey(songName)) {
                 return artist;
+            }
+        }
         return null;
     }
 
+    /**
+     * method for getting the singleton instance of the Global Objects
+     * @return the instance of the class
+     */
     public static GlobalObjects getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new GlobalObjects();
+        }
         return instance;
     }
 
-    public Album getAlbumWithSong(SongInput song) {
+    /**
+     *
+     * @param song to find in which album it belongs
+     * @return the album who has given song name in it
+     */
+    public Album getAlbumWithSong(final SongInput song) {
         for (Album album : library.getAlbums()) {
-            if (album.getSongs().contains(song))
+            if (album.getSongs().contains(song)) {
                 return album;
+            }
         }
         return null;
     }

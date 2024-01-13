@@ -1,10 +1,6 @@
 package main.wrapped.subtypes;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import fileio.input.EpisodeInput;
-import fileio.input.SongInput;
-import main.entities.Album;
-import main.entities.Artist;
 import main.globals.GlobalObjects;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
@@ -15,8 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class NormalUserWrappedCommand extends WrappedCommand {
-    public NormalUserWrappedCommand(Command command) {
+public final class NormalUserWrappedCommand extends WrappedCommand {
+    private static final int MAX_TOP_RESULTS = 5;
+    public NormalUserWrappedCommand(final Command command) {
         super(command);
     }
 
@@ -28,7 +25,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                 .get(getUsername()).getTop().getTopArtists().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(entry -> entry.getKey()))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
 
@@ -44,7 +41,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                 .get(getUsername()).getTop().getTopGenres().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(Map.Entry::getKey))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode genreNode = Command.getObjectMapper().createObjectNode();
@@ -58,7 +55,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                 .get(getUsername()).getTop().getTopSongs().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(entry -> entry.getKey()))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode songNode = Command.getObjectMapper().createObjectNode();
@@ -72,7 +69,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                 .get(getUsername()).getTop().getTopAlbums().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(entry -> entry.getKey()))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode albumNode = Command.getObjectMapper().createObjectNode();
@@ -86,7 +83,7 @@ public class NormalUserWrappedCommand extends WrappedCommand {
                 .get(getUsername()).getTop().getTopEpisodes().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(entry -> entry.getKey()))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode episodeNode = Command.getObjectMapper().createObjectNode();

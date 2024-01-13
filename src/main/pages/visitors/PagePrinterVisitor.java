@@ -96,7 +96,8 @@ public class PagePrinterVisitor implements PageVisitor {
         for (SongInput song : UserSpaceDb.getDatabase().get(user).getRecommendedSongs()) {
             cnt++;
             toPrint.append(song.getName()).append(", ");
-            if (UserSpaceDb.getDatabase().get(user).getRecommendedSongs().indexOf(song) >= MAX_RESULTS) {
+            if (UserSpaceDb.getDatabase().get(user)
+                    .getRecommendedSongs().indexOf(song) >= MAX_RESULTS) {
                 break;
             }
         }
@@ -109,7 +110,8 @@ public class PagePrinterVisitor implements PageVisitor {
         for (Playlist playlist : UserSpaceDb.getDatabase().get(user).getRecommendedPlaylists()) {
             cnt++;
             toPrint.append(playlist.getName()).append(", ");
-            if (UserSpaceDb.getDatabase().get(user).getRecommendedPlaylists().indexOf(playlist) >= MAX_RESULTS) {
+            if (UserSpaceDb.getDatabase().get(user)
+                    .getRecommendedPlaylists().indexOf(playlist) >= MAX_RESULTS) {
                 break;
             }
         }

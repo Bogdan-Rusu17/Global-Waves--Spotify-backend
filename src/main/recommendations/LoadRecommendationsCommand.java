@@ -11,11 +11,14 @@ import main.userspace.user_interface.player.subtypes.state.subtypes.SongState;
 
 import java.util.ArrayList;
 
-public class LoadRecommendationsCommand extends LoadCommand {
-    public LoadRecommendationsCommand(Command command) {
+public final class LoadRecommendationsCommand extends LoadCommand {
+    public LoadRecommendationsCommand(final Command command) {
         super(command);
     }
 
+    /**
+     * load the last song from the song recommendations list for the user
+     */
     public void loadSong() {
         this.outputBase();
         ArrayList<SongInput> recom = UserSpaceDb.getDatabase()
@@ -34,8 +37,11 @@ public class LoadRecommendationsCommand extends LoadCommand {
                 .listenSong(selectedSong, 1);
         GlobalObjects.getInstance().existsArtist(selectedSong.getArtist())
                 .getTop().getListenerSong(selectedSong, 1, getUsername());
-//        this.deleteSelection();
+        this.deleteSelection();
     }
+    /**
+     * load the last playlist from the playlist recommendations list for the user
+     */
     public void loadPlaylist() {
         this.outputBase();
         ArrayList<Playlist> recom = UserSpaceDb.getDatabase()
@@ -65,7 +71,7 @@ public class LoadRecommendationsCommand extends LoadCommand {
                 .listenSong(firstSong, 1);
         GlobalObjects.getInstance().existsArtist(firstSong.getArtist())
                 .getTop().getListenerSong(firstSong, 1, getUsername());
-//        this.deleteSelection();
+        this.deleteSelection();
     }
 
     @Override

@@ -9,6 +9,7 @@ import main.userspace.user_interface.player.subtypes.state.State;
 import java.util.ArrayList;
 
 public final class PlaylistState extends State {
+    private static final int AD_LENGTH = 10;
     private Playlist playlist;
     private int songIndex;
     private ArrayList<Integer> idxOrder;
@@ -65,15 +66,17 @@ public final class PlaylistState extends State {
             if (timestamp < this.getRemainedTime()) {
                 this.setRemainedTime(this.getRemainedTime() - timestamp);
                 if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
-                    if (this.getRemainedTime() <= 10) {
-                        AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                    if (this.getRemainedTime() <= AD_LENGTH) {
+                        AdMonetization.monetize(username,
+                                UserSpaceDb.getDatabase().get(username).getAdPrice());
                         UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
                     }
                 }
                 return;
             }
             if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
-                AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                AdMonetization.monetize(username,
+                        UserSpaceDb.getDatabase().get(username).getAdPrice());
                 UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
             }
             int nextSongIdx = getNextSong(songIndex);

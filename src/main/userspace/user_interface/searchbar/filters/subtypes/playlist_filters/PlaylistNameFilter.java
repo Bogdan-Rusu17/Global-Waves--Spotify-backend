@@ -11,6 +11,7 @@ public final class PlaylistNameFilter extends PlaylistFilter {
 
     @Override
     public boolean isMetFilter(final Object playlist) {
-        return ((Playlist) playlist).getName().toLowerCase().startsWith(this.getName().toLowerCase());
+        return ((Playlist) playlist).getName().toLowerCase()
+                .startsWith(this.getName().toLowerCase());
     }
 }

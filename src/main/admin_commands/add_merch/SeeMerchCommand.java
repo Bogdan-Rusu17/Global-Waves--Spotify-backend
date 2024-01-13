@@ -6,8 +6,8 @@ import main.globals.GlobalObjects;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 
-public class SeeMerchCommand extends Command {
-    public SeeMerchCommand(Command command) {
+public final class SeeMerchCommand extends Command {
+    public SeeMerchCommand(final Command command) {
         this.setCommand(command.getCommand());
         this.setUsername(command.getUsername());
         this.setTimestamp(command.getTimestamp());

@@ -68,7 +68,8 @@ public final class AddPodcastCommand extends Command {
         newPodcast.setEpisodes(getEpisodes());
         newPodcast.setName(getName());
         host.getPage().getPodcasts().add(newPodcast);
-        host.notifyObservers(new Notification("New Podcast", "New Podcast from " + host.getUsername() + "."));
+        host.notifyObservers(new Notification("New Podcast",
+                "New Podcast from " + host.getUsername() + "."));
         GlobalObjects.getInstance().getLibrary().getPodcasts().add(newPodcast);
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new podcast successfully.");

@@ -7,8 +7,8 @@ import main.globals.GlobalObjects;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 
-public class UnsubscribeCommand extends Command {
-    public UnsubscribeCommand(Command command) {
+public final class UnsubscribeCommand extends Command {
+    public UnsubscribeCommand(final Command command) {
         this.setCommand(command.getCommand());
         this.setUsername(command.getUsername());
         this.setTimestamp(command.getTimestamp());
@@ -24,15 +24,17 @@ public class UnsubscribeCommand extends Command {
         }
         for (Artist artist : GlobalObjects.getInstance().getLibrary().getArtists()) {
             if (UserSpaceDb.getDatabase().get(getUsername()).getUserPage() == artist.getPage()) {
-                artist.dettach(UserSpaceDb.getDatabase().get(getUsername()));
-                this.outputErrorMessage(getUsername() + " unsubscribed from " + artist.getUsername() + " successfully.");
+                artist.detach(UserSpaceDb.getDatabase().get(getUsername()));
+                this.outputErrorMessage(getUsername() + " unsubscribed from "
+                        + artist.getUsername() + " successfully.");
                 return;
             }
         }
         for (Host host : GlobalObjects.getInstance().getLibrary().getHosts()) {
             if (UserSpaceDb.getDatabase().get(getUsername()).getUserPage() == host.getPage()) {
-                host.dettach(UserSpaceDb.getDatabase().get(getUsername()));
-                this.outputErrorMessage(getUsername() + " unsubscribed from " + host.getUsername() + " successfully.");
+                host.detach(UserSpaceDb.getDatabase().get(getUsername()));
+                this.outputErrorMessage(getUsername() + " unsubscribed from "
+                        + host.getUsername() + " successfully.");
                 return;
             }
         }

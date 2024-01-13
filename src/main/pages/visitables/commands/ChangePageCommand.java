@@ -40,17 +40,20 @@ public final class ChangePageCommand extends Command {
             }
             case "Artist" -> {
                 Artist artist = null;
-                if (UserSpaceDb.getDatabase().get(getUsername()).getPlayer().getLoadedAlbum() != null) {
+                if (UserSpaceDb.getDatabase().get(getUsername())
+                        .getPlayer().getLoadedAlbum() != null) {
                     artist = GlobalObjects.getInstance().existsArtist(
                             UserSpaceDb.getDatabase().get(getUsername())
                                     .getPlayer().getLoadedAlbum().getOwner());
                 }
-                if (UserSpaceDb.getDatabase().get(getUsername()).getPlayer().getLoadedSong() != null) {
+                if (UserSpaceDb.getDatabase().get(getUsername())
+                        .getPlayer().getLoadedSong() != null) {
                     artist = GlobalObjects.getInstance().existsArtist(
                             UserSpaceDb.getDatabase().get(getUsername())
                                     .getPlayer().getLoadedSong().getArtist());
                 }
-                if (UserSpaceDb.getDatabase().get(getUsername()).getPlayer().getLoadedPlaylist() != null) {
+                if (UserSpaceDb.getDatabase().get(getUsername())
+                        .getPlayer().getLoadedPlaylist() != null) {
                     Playlist loadedPlaylist = UserSpaceDb.getDatabase().get(getUsername())
                             .getPlayer().getLoadedPlaylist();
                     int songIdx = UserSpaceDb.getDatabase().get(getUsername())
@@ -76,7 +79,8 @@ public final class ChangePageCommand extends Command {
                         .clearForwardHistory();
                 outputErrorMessage(getUsername() + " accessed Host successfully.");
             }
-            default -> outputErrorMessage(getUsername() + " is trying to access a non-existent page.");
+            default -> outputErrorMessage(getUsername()
+                    + " is trying to access a non-existent page.");
         }
     }
 }

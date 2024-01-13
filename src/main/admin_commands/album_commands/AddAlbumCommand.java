@@ -9,7 +9,6 @@ import main.notification_system.Notification;
 import main.userspace.Command;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public final class AddAlbumCommand extends Command {
@@ -78,11 +77,14 @@ public final class AddAlbumCommand extends Command {
         Album newAlbum = new Album(this.getName(), this.getUsername(),
                 this.getDescription(), this.getReleaseYear(), this.getSongs());
         artist.getPage().getAlbums().add(newAlbum);
-        artist.notifyObservers(new Notification("New Album", "New Album from " + artist.getUsername() + "."));
+        artist.notifyObservers(new Notification("New Album", "New Album from "
+                + artist.getUsername() + "."));
         GlobalObjects.getInstance().getLibrary().getAlbums().add(newAlbum);
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new album successfully.");
         GlobalObjects.getInstance().getOutputs().add(this.getObjectNode());
-        GlobalObjects.getInstance().getLibrary().getAlbums().sort(Comparator.comparingInt(a -> a.getArtist().getPrio()));
+        // sorts the albums in the library to keep the order of artist addition
+        GlobalObjects.getInstance().getLibrary().getAlbums().sort(
+                Comparator.comparingInt(a -> a.getArtist().getPrio()));
     }
 }

@@ -5,8 +5,9 @@ import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 import main.userspace.user_interface.player.subtypes.state.subtypes.PodcastState;
 
-public class CreateAdBreakCommand extends Command {
-    public CreateAdBreakCommand(Command command) {
+public final class CreateAdBreakCommand extends Command {
+    private static final int AD_LENGTH = 10;
+    public CreateAdBreakCommand(final Command command) {
         this.setCommand(command.getCommand());
         this.setUsername(command.getUsername());
         this.setTimestamp(command.getTimestamp());
@@ -29,14 +30,14 @@ public class CreateAdBreakCommand extends Command {
                 .getPlayer().getLoadedSong() != null) {
             isAnyAudioLoaded = true;
             int remTime = UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
-                    .getSongState().getRemainedTime() + 10;
+                    .getSongState().getRemainedTime() + AD_LENGTH;
             UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
                     .getSongState().setRemainedTime(remTime);
         } else if (UserSpaceDb.getDatabase().get(normalUserName)
                 .getPlayer().getLoadedPodcast() != null) {
             isAnyAudioLoaded = true;
             int remTime = UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
-                    .getPodcastState().getRemainedTime() + 10;
+                    .getPodcastState().getRemainedTime() + AD_LENGTH;
             UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
                     .getPodcastState().setRemainedTime(remTime);
             PodcastState newState =
@@ -50,14 +51,14 @@ public class CreateAdBreakCommand extends Command {
                 .getPlayer().getLoadedPlaylist() != null) {
             isAnyAudioLoaded = true;
             int remTime = UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
-                    .getPlaylistState().getRemainedTime() + 10;
+                    .getPlaylistState().getRemainedTime() + AD_LENGTH;
             UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
                     .getPlaylistState().setRemainedTime(remTime);
         } else if (UserSpaceDb.getDatabase().get(normalUserName)
                 .getPlayer().getLoadedAlbum() != null) {
             isAnyAudioLoaded = true;
             int remTime = UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
-                    .getAlbumState().getRemainedTime() + 10;
+                    .getAlbumState().getRemainedTime() + AD_LENGTH;
             UserSpaceDb.getDatabase().get(normalUserName).getPlayer()
                     .getAlbumState().setRemainedTime(remTime);
         }

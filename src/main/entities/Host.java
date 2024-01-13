@@ -28,17 +28,17 @@ public final class Host implements Subject {
         this.page = new HostPage();
     }
     @Override
-    public void attach(Observer obs) {
+    public void attach(final Observer obs) {
         observers.add(obs);
     }
 
     @Override
-    public void dettach(Observer obs) {
+    public void detach(final Observer obs) {
         observers.remove(obs);
     }
 
     @Override
-    public void notifyObservers(Notification notification) {
+    public void notifyObservers(final Notification notification) {
         for (Observer observer : observers) {
             observer.update(notification);
         }
@@ -48,7 +48,7 @@ public final class Host implements Subject {
         return top;
     }
 
-    public void setTop(HostTop top) {
+    public void setTop(final HostTop top) {
         this.top = top;
     }
 
@@ -56,7 +56,7 @@ public final class Host implements Subject {
         return observers;
     }
 
-    public void setObservers(List<Observer> observers) {
+    public void setObservers(final List<Observer> observers) {
         this.observers = observers;
     }
 

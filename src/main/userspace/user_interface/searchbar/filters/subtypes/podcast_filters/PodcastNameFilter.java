@@ -10,6 +10,7 @@ public final class PodcastNameFilter extends PodcastFilter {
     }
     @Override
     public boolean isMetFilter(final Object podcast) {
-        return ((PodcastInput) podcast).getName().toLowerCase().startsWith(this.getName().toLowerCase());
+        return ((PodcastInput) podcast).getName().toLowerCase()
+                .startsWith(this.getName().toLowerCase());
     }
 }

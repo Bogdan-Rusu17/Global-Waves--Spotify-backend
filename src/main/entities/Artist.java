@@ -32,17 +32,17 @@ public final class Artist implements Subject {
     }
 
     @Override
-    public void attach(Observer obs) {
+    public void attach(final Observer obs) {
         observers.add(obs);
     }
 
     @Override
-    public void dettach(Observer obs) {
+    public void detach(final Observer obs) {
         observers.remove(obs);
     }
 
     @Override
-    public void notifyObservers(Notification notification) {
+    public void notifyObservers(final Notification notification) {
         for (Observer observer : observers) {
             observer.update(notification);
         }
@@ -108,10 +108,17 @@ public final class Artist implements Subject {
         return total;
     }
 
-    public Merch getMerchByName(String name) {
-        for (Merch merch : page.getMerchProducts())
-            if (merch.getName().equals(name))
+    /**
+     *
+     * @param name of the merch to be searched
+     * @return the merch object if artist has it in its inventory
+     */
+    public Merch getMerchByName(final String name) {
+        for (Merch merch : page.getMerchProducts()) {
+            if (merch.getName().equals(name)) {
                 return merch;
+            }
+        }
         return null;
     }
 
@@ -119,7 +126,7 @@ public final class Artist implements Subject {
         return observers;
     }
 
-    public void setObservers(List<Observer> observers) {
+    public void setObservers(final List<Observer> observers) {
         this.observers = observers;
     }
 
@@ -127,7 +134,7 @@ public final class Artist implements Subject {
         return top;
     }
 
-    public void setTop(ArtistTop top) {
+    public void setTop(final ArtistTop top) {
         this.top = top;
     }
 

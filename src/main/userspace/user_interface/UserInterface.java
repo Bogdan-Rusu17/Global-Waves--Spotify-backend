@@ -40,7 +40,7 @@ public final class UserInterface implements Observer {
     }
 
     @Override
-    public void update(Notification notification) {
+    public void update(final Notification notification) {
         notifications.add(notification);
     }
 
@@ -73,7 +73,7 @@ public final class UserInterface implements Observer {
         return lastRecommendation;
     }
 
-    public void setLastRecommendation(String lastRecommendation) {
+    public void setLastRecommendation(final String lastRecommendation) {
         this.lastRecommendation = lastRecommendation;
     }
 
@@ -81,7 +81,7 @@ public final class UserInterface implements Observer {
         return recommendedSongs;
     }
 
-    public void setRecommendedSongs(ArrayList<SongInput> recommendedSongs) {
+    public void setRecommendedSongs(final ArrayList<SongInput> recommendedSongs) {
         this.recommendedSongs = recommendedSongs;
     }
 
@@ -89,7 +89,7 @@ public final class UserInterface implements Observer {
         return recommendedPlaylists;
     }
 
-    public void setRecommendedPlaylists(ArrayList<Playlist> recommendedPlaylists) {
+    public void setRecommendedPlaylists(final ArrayList<Playlist> recommendedPlaylists) {
         this.recommendedPlaylists = recommendedPlaylists;
     }
 
@@ -97,14 +97,23 @@ public final class UserInterface implements Observer {
         return history;
     }
 
-    public void setHistory(NavigationHistoryCaretaker history) {
+    public void setHistory(final NavigationHistoryCaretaker history) {
         this.history = history;
     }
 
+    /**
+     *
+     * @return page memento/snapshot of the current page the user is on
+     */
     public PageStateMemento savePageStateMemento() {
         return new PageStateMemento(userPage);
     }
-    public void restorePageStateMemento(PageStateMemento pageStateMemento) {
+
+    /**
+     *
+     * @param pageStateMemento snapshot used to restore the user page
+     */
+    public void restorePageStateMemento(final PageStateMemento pageStateMemento) {
         userPage = pageStateMemento.getPage();
     }
 
@@ -112,7 +121,7 @@ public final class UserInterface implements Observer {
         return boughtMerch;
     }
 
-    public void setBoughtMerch(ArrayList<Merch> boughtMerch) {
+    public void setBoughtMerch(final ArrayList<Merch> boughtMerch) {
         this.boughtMerch = boughtMerch;
     }
 
@@ -120,7 +129,7 @@ public final class UserInterface implements Observer {
         return notifications;
     }
 
-    public void setNotifications(ArrayList<Notification> notifications) {
+    public void setNotifications(final ArrayList<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -128,7 +137,7 @@ public final class UserInterface implements Observer {
         return incomingAd;
     }
 
-    public void setIncomingAd(boolean incomingAd) {
+    public void setIncomingAd(final boolean incomingAd) {
         this.incomingAd = incomingAd;
     }
 
@@ -136,7 +145,7 @@ public final class UserInterface implements Observer {
         return adPrice;
     }
 
-    public void setAdPrice(int adPrice) {
+    public void setAdPrice(final int adPrice) {
         this.adPrice = adPrice;
     }
 
@@ -144,7 +153,7 @@ public final class UserInterface implements Observer {
         return premiumUser;
     }
 
-    public void setPremiumUser(boolean premiumUser) {
+    public void setPremiumUser(final boolean premiumUser) {
         this.premiumUser = premiumUser;
     }
 
@@ -152,7 +161,7 @@ public final class UserInterface implements Observer {
         return top;
     }
 
-    public void setTop(UserTop top) {
+    public void setTop(final UserTop top) {
         this.top = top;
     }
 

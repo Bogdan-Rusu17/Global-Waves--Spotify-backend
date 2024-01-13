@@ -111,7 +111,8 @@ public final class AddEventCommand extends Command {
         }
         Event newEvent = new Event(getUsername(), getName(), getDescription(), getDate());
         artist.getPage().getEvents().add(newEvent);
-        artist.notifyObservers(new Notification("New Event", "New Event from " + artist.getUsername() + "."));
+        artist.notifyObservers(new Notification("New Event",
+                "New Event from " + artist.getUsername() + "."));
         this.outputBase();
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new event successfully.");

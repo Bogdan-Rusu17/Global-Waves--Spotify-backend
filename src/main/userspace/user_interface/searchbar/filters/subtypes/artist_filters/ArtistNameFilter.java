@@ -11,6 +11,7 @@ public final class ArtistNameFilter extends ArtistFilter {
 
     @Override
     public boolean isMetFilter(final Object artist) {
-        return ((Artist) artist).getUsername().toLowerCase().startsWith(this.getName().toLowerCase());
+        return ((Artist) artist).getUsername().toLowerCase()
+                .startsWith(this.getName().toLowerCase());
     }
 }

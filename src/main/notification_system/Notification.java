@@ -1,10 +1,10 @@
 package main.notification_system;
 
-public class Notification {
+public final class Notification {
     private String name;
     private String description;
 
-    public Notification(String name, String description) {
+    public Notification(final String name, final String description) {
         this.name = name;
         this.description = description;
     }
@@ -13,7 +13,7 @@ public class Notification {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -21,7 +21,7 @@ public class Notification {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 }

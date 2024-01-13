@@ -28,7 +28,6 @@ import main.monetization.CancelPremiumCommand;
 import main.monetization.CreateAdBreakCommand;
 import main.notification_system.GetNotificationsCommand;
 import main.notification_system.SubscribeCommand;
-import main.notification_system.UnsubscribeCommand;
 import main.pages.navigation_history.NextPageCommand;
 import main.pages.navigation_history.PrevPageCommand;
 import main.pages.visitables.commands.ChangePageCommand;
@@ -225,7 +224,7 @@ public class Command {
             case "wrapped" -> {
                 if (GlobalObjects.getInstance().containsNormalUser(this.getUsername())) {
                     commandToExec = new NormalUserWrappedCommand(this);
-                } else if (GlobalObjects.getInstance().existsArtist(this.getUsername()) != null){
+                } else if (GlobalObjects.getInstance().existsArtist(this.getUsername()) != null) {
                     commandToExec = new ArtistWrappedCommand(this);
                 } else {
                     commandToExec = new HostWrappedCommand(this);
@@ -669,11 +668,18 @@ public class Command {
         GlobalObjects.getInstance().getOutputs().add(objectNode);
     }
 
+    /**
+     *
+     *
+     */
     public String getRecommendationType() {
         return recommendationType;
     }
-
-    public void setRecommendationType(String recommendationType) {
+    /**
+     *
+     *
+     */
+    public void setRecommendationType(final String recommendationType) {
         this.recommendationType = recommendationType;
     }
 

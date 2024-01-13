@@ -6,8 +6,8 @@ import main.globals.GlobalObjects;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 
-public class GetNotificationsCommand extends Command {
-    public GetNotificationsCommand(Command command) {
+public final class GetNotificationsCommand extends Command {
+    public GetNotificationsCommand(final Command command) {
         this.setCommand(command.getCommand());
         this.setUsername(command.getUsername());
         this.setTimestamp(command.getTimestamp());
@@ -17,7 +17,8 @@ public class GetNotificationsCommand extends Command {
     public void execCommand() {
         this.outputBase();
         ArrayNode notificationsNode = Command.getObjectMapper().createArrayNode();
-        for (Notification notification : UserSpaceDb.getDatabase().get(getUsername()).getNotifications()) {
+        for (Notification notification : UserSpaceDb.getDatabase()
+                .get(getUsername()).getNotifications()) {
             ObjectNode node = Command.getObjectMapper().createObjectNode();
             node.put("name", notification.getName());
             node.put("description", notification.getDescription());

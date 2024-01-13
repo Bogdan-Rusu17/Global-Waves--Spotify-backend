@@ -7,6 +7,7 @@ import main.userspace.UserSpaceDb;
 import main.userspace.user_interface.player.subtypes.state.State;
 
 public final class PodcastState extends State {
+    private static final int AD_LENGTH = 10;
     private PodcastInput podcast;
     private int episodeIndex;
     private boolean finished;
@@ -27,15 +28,17 @@ public final class PodcastState extends State {
             if (timestamp < this.getRemainedTime()) {
                 this.setRemainedTime(this.getRemainedTime() - timestamp);
                 if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
-                    if (this.getRemainedTime() <= 10) {
-                        AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                    if (this.getRemainedTime() <= AD_LENGTH) {
+                        AdMonetization.monetize(username,
+                                UserSpaceDb.getDatabase().get(username).getAdPrice());
                         UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
                     }
                 }
                 return;
             }
             if (UserSpaceDb.getDatabase().get(username).isIncomingAd()) {
-                AdMonetization.monetize(username, UserSpaceDb.getDatabase().get(username).getAdPrice());
+                AdMonetization.monetize(username,
+                        UserSpaceDb.getDatabase().get(username).getAdPrice());
                 UserSpaceDb.getDatabase().get(username).setIncomingAd(false);
             }
             if (episodeIndex + 1 == podcast.getEpisodes().size()) {
@@ -45,14 +48,17 @@ public final class PodcastState extends State {
             }
             episodeIndex++;
             timestamp -= this.getRemainedTime();
-            while (episodeIndex < podcast.getEpisodes().size() && timestamp >= podcast.getEpisodes()
+            while (episodeIndex < podcast.getEpisodes().size() && timestamp >= podcast
+                    .getEpisodes()
                     .get(episodeIndex).getDuration()) {
                 timestamp -= podcast.getEpisodes().get(episodeIndex).getDuration();
                 UserSpaceDb.getDatabase().get(username).getTop()
                         .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                     GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                        .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                            .getListenerEpisode(podcast.getEpisodes()
+                                    .get(episodeIndex), 1, username);
+                }
                 episodeIndex++;
             }
 
@@ -63,9 +69,11 @@ public final class PodcastState extends State {
             }
             UserSpaceDb.getDatabase().get(username).getTop()
                     .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                 GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                    .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                        .getListenerEpisode(podcast.getEpisodes()
+                                .get(episodeIndex), 1, username);
+            }
             this.setName(podcast.getEpisodes().get(episodeIndex).getName());
             this.setRemainedTime(podcast.getEpisodes().get(episodeIndex)
                     .getDuration() - timestamp);
@@ -81,9 +89,11 @@ public final class PodcastState extends State {
                         .get(episodeIndex).getDuration() - timestamp);
                 UserSpaceDb.getDatabase().get(username).getTop()
                         .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                     GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                        .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                            .getListenerEpisode(podcast.getEpisodes()
+                                    .get(episodeIndex), 1, username);
+                }
                 return;
             }
             if (episodeIndex + 1 == podcast.getEpisodes().size()) {
@@ -97,18 +107,22 @@ public final class PodcastState extends State {
                     .get(episodeIndex).getDuration();
             UserSpaceDb.getDatabase().get(username).getTop()
                     .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                 GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                    .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                        .getListenerEpisode(podcast.getEpisodes()
+                                .get(episodeIndex), 1, username);
+            }
             episodeIndex++;
             while (episodeIndex < podcast.getEpisodes().size()
                     && timestamp >= podcast.getEpisodes().get(episodeIndex).getDuration()) {
                 timestamp -= podcast.getEpisodes().get(episodeIndex).getDuration();
                 UserSpaceDb.getDatabase().get(username).getTop()
                         .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+                if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                     GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                        .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                            .getListenerEpisode(podcast.getEpisodes()
+                                    .get(episodeIndex), 1, username);
+                }
                 episodeIndex++;
             }
 
@@ -120,9 +134,10 @@ public final class PodcastState extends State {
             }
             UserSpaceDb.getDatabase().get(username).getTop()
                     .listenEpisode(podcast.getEpisodes().get(episodeIndex), 1);
-            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+            if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
                 GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                    .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+                        .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), 1, username);
+            }
             this.setName(podcast.getEpisodes().get(episodeIndex).getName());
             this.setRemainedTime(podcast.getEpisodes().
                     get(episodeIndex).getDuration() - timestamp);
@@ -139,9 +154,10 @@ public final class PodcastState extends State {
                 / podcast.getEpisodes().get(episodeIndex).getDuration() + 1;
         UserSpaceDb.getDatabase().get(username).getTop()
                 .listenEpisode(podcast.getEpisodes().get(episodeIndex), times);
-        if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null)
+        if (GlobalObjects.getInstance().existsHost(podcast.getOwner()) != null) {
             GlobalObjects.getInstance().existsHost(podcast.getOwner()).getTop()
-                .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), times, username);
+                    .getListenerEpisode(podcast.getEpisodes().get(episodeIndex), times, username);
+        }
     }
 
     public PodcastInput getPodcast() {

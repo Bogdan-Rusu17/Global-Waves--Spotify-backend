@@ -67,7 +67,8 @@ public final class AddMerchCommand extends Command {
         }
         Merch newMerch = new Merch(getName(), getDescription(), getPrice());
         artist.getPage().getMerchProducts().add(newMerch);
-        artist.notifyObservers(new Notification("New Merchandise", "New Merchandise from " + artist.getUsername() + "."));
+        artist.notifyObservers(new Notification("New Merchandise", "New Merchandise from "
+                + artist.getUsername() + "."));
         this.outputBase();
         this.getObjectNode().put("message", this.getUsername()
                 + " has added new merchandise successfully.");

@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.input.LibraryInput;
-import fileio.input.PodcastInput;
 import fileio.input.SongInput;
 import fileio.input.UserInput;
-import main.entities.Album;
 import main.entities.Artist;
 import main.globals.GlobalObjects;
 import main.globals.LikeDB;
@@ -28,13 +26,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The entry point to this homework. It runs the checker that tests your implementation.
  */
 public final class Main {
     static final String LIBRARY_PATH = CheckerConstants.TESTS_PATH + "library/library.json";
+    static final double ONE_HUNDRED = 100.0;
 
     /**
      * for coding style
@@ -60,7 +58,6 @@ public final class Main {
             resultFile.delete();
         }
         Files.createDirectories(path);
-        int i = 0;
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.getName().startsWith("library")) {
                 continue;
@@ -72,9 +69,6 @@ public final class Main {
             if (isCreated) {
                 action(file.getName(), filepath);
             }
-            i++;
-            if (i > 16)
-                break;
         }
 
         Checker.calculateScore();
@@ -138,18 +132,25 @@ public final class Main {
         ObjectNode res = objectMapper.createObjectNode();
         int idx = 0;
         List<Artist> sortedArtists = GlobalObjects.getInstance().getLibrary().getArtists().stream()
-                .sorted(Comparator.comparing((Artist a) -> a.getTop().getSongRevenue(), Comparator.reverseOrder())
+                .sorted(Comparator.comparing((Artist a) -> a.getTop().getSongRevenue(),
+                                Comparator.reverseOrder())
                         .thenComparing(a -> a.getTop().getMerchRevenue(), Comparator.reverseOrder())
                         .thenComparing(Artist::getUsername))
                 .toList();
-//        GlobalObjects.getInstance().getLibrary().getArtists().sort(Comparator.comparing(Artist::getUsername));
+
         for (Artist artist : sortedArtists) {
-            if (!artist.getTop().getTopFans().isEmpty() || artist.getTop().getMerchRevenue() > 0.0) {
+            if (!artist.getTop().getTopFans().isEmpty()
+                    || artist.getTop().getMerchRevenue() > 0.0) {
                 ObjectNode artistNode = objectMapper.createObjectNode();
-                artistNode.put("merchRevenue", Math.round(artist.getTop().getMerchRevenue() * 100.0) / 100.0);
-                artistNode.put("songRevenue", Math.round(artist.getTop().getSongRevenue() * 100.0) / 100.0);
+
+                artistNode.put("merchRevenue",
+                        Math.round(artist.getTop().getMerchRevenue() * ONE_HUNDRED) / ONE_HUNDRED);
+                artistNode.put("songRevenue",
+                        Math.round(artist.getTop().getSongRevenue() * ONE_HUNDRED) / ONE_HUNDRED);
                 artistNode.put("ranking", idx + 1);
-                Optional<Map.Entry<String, Double>> maxSongMoney = artist.getTop().getRevenuePerSongs().entrySet()
+
+                Optional<Map.Entry<String, Double>> maxSongMoney = artist.getTop()
+                        .getRevenuePerSongs().entrySet()
                         .stream()
                         .filter(entry -> entry.getValue() != 0.0)
                         .max((entry1, entry2) -> {
@@ -160,10 +161,11 @@ public final class Main {
                                 return entry2.getKey().compareTo(entry1.getKey());
                             }
                         });
-                if (maxSongMoney.isPresent())
+                if (maxSongMoney.isPresent()) {
                     artistNode.put("mostProfitableSong", maxSongMoney.get().getKey());
-                else
+                } else {
                     artistNode.put("mostProfitableSong", "N/A");
+                }
                 idx++;
                 res.put(artist.getUsername(), artistNode);
             }

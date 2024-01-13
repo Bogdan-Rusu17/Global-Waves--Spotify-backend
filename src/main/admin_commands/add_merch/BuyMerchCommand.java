@@ -7,8 +7,8 @@ import main.globals.GlobalObjects;
 import main.userspace.Command;
 import main.userspace.UserSpaceDb;
 
-public class BuyMerchCommand extends Command {
-    public BuyMerchCommand(Command command) {
+public final class BuyMerchCommand extends Command {
+    public BuyMerchCommand(final Command command) {
         this.setCommand(command.getCommand());
         this.setUsername(command.getUsername());
         this.setName(command.getName());
@@ -31,7 +31,8 @@ public class BuyMerchCommand extends Command {
                     return;
                 }
                 UserSpaceDb.getDatabase().get(getUsername()).getBoughtMerch().add(merchToBuy);
-                artist.getTop().setMerchRevenue(artist.getTop().getMerchRevenue() + merchToBuy.getPrice());
+                artist.getTop().setMerchRevenue(artist.getTop().getMerchRevenue()
+                        + merchToBuy.getPrice());
                 this.outputErrorMessage(getUsername() + " has added new merch successfully.");
                 return;
             }

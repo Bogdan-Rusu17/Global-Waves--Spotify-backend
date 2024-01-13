@@ -11,8 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HostWrappedCommand extends WrappedCommand {
-    public HostWrappedCommand(Command command) {
+public final class HostWrappedCommand extends WrappedCommand {
+    private static final int MAX_TOP_RESULTS = 5;
+    public HostWrappedCommand(final Command command) {
         super(command);
     }
 
@@ -26,7 +27,7 @@ public class HostWrappedCommand extends WrappedCommand {
         HashMap<String, Integer> topEpisodes = host.getTop().getTopEpisodes().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()
                         .thenComparing(entry -> entry.getKey()))
-                .limit(5)
+                .limit(MAX_TOP_RESULTS)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1, LinkedHashMap::new));
         ObjectNode episodeNode = Command.getObjectMapper().createObjectNode();
